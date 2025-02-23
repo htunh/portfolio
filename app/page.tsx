@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function Home() {
@@ -8,10 +9,13 @@ export default function Home() {
         Senior Frontend Engineer | React | Next.js | Node.js
       </p>
       <div className="flex space-x-4 mt-6">
-        <a href="https://github.com/yourgithub" className="text-2xl">
+        <a href="https://github.com/htunh" className="text-2xl">
           <FaGithub />
         </a>
-        <a href="https://linkedin.com/in/yourlinkedin" className="text-2xl">
+        <a
+          href="https://mm.linkedin.com/in/htun-htun-611307134"
+          className="text-2xl"
+        >
           <FaLinkedin />
         </a>
       </div>
