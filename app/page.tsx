@@ -2,16 +2,44 @@
 
 import { useEffect, useState } from "react";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 export default function Home() {
   const [animatedText, setAnimatedText] = useState<string[]>([]);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentProject, setCurrentProject] = useState(0);
   const [submitStatus, setSubmitStatus] = useState<{
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
+
+  const projects = [
+    {
+      title: "E-Commerce Platform",
+      description: "A full-stack e-commerce platform built with Next.js and Node.js, featuring real-time inventory management and modern UI/UX design with Three.js.",
+      image: "/project1.jpg"
+    },
+    {
+      title: "Content Management App",
+      description: "A content management app built with Next.js and Node.js, featuring a modern UI/UX design with Tailwind CSS.",
+      image: "/project2.jpg"
+    },
+    {
+      title: "Portfolio Website",
+      description: "A modern portfolio website showcasing projects and skills with modern UI/UX and responsive design.",
+      image: "/project3.jpg"
+    }
+  ];
+
+  const nextProject = () => {
+    setCurrentProject((prev) => (prev + 1) % projects.length);
+  };
+
+  const prevProject = () => {
+    setCurrentProject((prev) => (prev - 1 + projects.length) % projects.length);
+  };
 
   useEffect(() => {
     const text = "Hi, I'm Htun Htun 👋";
@@ -60,7 +88,7 @@ export default function Home() {
     <div className="relative flex size-full min-h-screen flex-col bg-[#131316] dark group/design-root overflow-x-hidden">
       <div className="layout-container flex h-full grow flex-col">
         {/* Header */}
-        <header className="fixed top-0 left-0 right-0 z-50 bg-[#131316] flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#2d2d34] px-10 py-3">
+        <header className="fixed top-0 left-0 right-0 z-50 bg-[#131316] flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#2d2d34] px-4 md:px-10 py-3">
           <div className="flex items-center gap-4 text-white">
             <div className="size-4">
               <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,26 +103,32 @@ export default function Home() {
                 </defs>
               </svg>
             </div>
-            <h2 className="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Htun&apos;s Portfolio</h2>
+            <h2 className="text-white text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">Htun&apos;s Portfolio</h2>
           </div>
-          <div className="flex flex-1 justify-end gap-8">
-            <div className="flex items-center gap-9">
+          <div className="flex flex-1 justify-end">
+            <div className="hidden md:flex items-center gap-9">
               <a className="text-white text-sm font-medium leading-normal hover:text-[#b7b7e0] transition-colors" href="#about">About</a>
               <a className="text-white text-sm font-medium leading-normal hover:text-[#b7b7e0] transition-colors" href="#projects">Projects</a>
               <a className="text-white text-sm font-medium leading-normal hover:text-[#b7b7e0] transition-colors" href="#skills">Skills</a>
               <a className="text-white text-sm font-medium leading-normal hover:text-[#b7b7e0] transition-colors" href="#contact">Contact</a>
             </div>
+            {/* Mobile Menu Button */}
+            <button className="md:hidden text-white p-2">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
         </header>
 
         {/* Main Content */}
-        <div className="px-40 flex flex-1 justify-center py-5">
-          <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+        <div className="px-4 sm:px-6 md:px-8 lg:px-40 flex flex-1 justify-center py-5 mt-16 md:mt-20">
+          <div className="layout-content-container flex flex-col w-full max-w-[960px] flex-1 gap-8 md:gap-10">
             {/* Hero Section */}
             <div className="@container">
               <div className="@[480px]:p-4">
                 <div
-                  className="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10 relative overflow-hidden"
+                  className="flex min-h-[400px] md:min-h-[480px] flex-col gap-4 md:gap-6 bg-cover bg-center bg-no-repeat rounded-xl items-start justify-end px-4 md:px-10 pb-6 md:pb-10 relative overflow-hidden"
                   style={{
                     backgroundImage: 'linear-gradient(135deg, rgba(19, 19, 22, 0.95) 0%, rgba(45, 45, 52, 0.95) 100%)'
                   }}
@@ -152,8 +186,8 @@ export default function Home() {
                       <div className="absolute bottom-1/3 left-1/3 w-2 h-2 bg-white rounded-full animate-particle-4 opacity-60"></div>
                     </div>
                   </div>
-                  <div className="relative z-10 flex flex-col gap-2 text-left">
-                    <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl">
+                  <div className="relative z-10 flex flex-col gap-2 text-left w-full">
+                    <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em]">
                       {animatedText.map((char, index) => (
                         <span
                           key={index}
@@ -164,11 +198,11 @@ export default function Home() {
                         </span>
                       ))}
                     </h1>
-                    <h2 className="text-white text-sm font-normal leading-normal @[480px]:text-base">Software Engineer</h2>
+                    <h2 className="text-white text-sm sm:text-base font-normal leading-normal">Software Engineer</h2>
                   </div>
                   <a
                     href="#projects"
-                    className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#b7b7e0] text-[#131316] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base hover:bg-[#a4a4d0] transition-colors"
+                    className="z-10 flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 md:h-12 px-4 md:px-5 bg-[#b7b7e0] text-[#131316] text-sm md:text-base font-bold leading-normal tracking-[0.015em] hover:bg-[#a4a4d0] transition-colors"
                   >
                     <span className="truncate">View Projects</span>
                   </a>
@@ -177,130 +211,163 @@ export default function Home() {
             </div>
 
             {/* About Section */}
-            <section id="about" className="mt-10 scroll-mt-20">
-              <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3">About Me</h2>
-              <p className="text-white text-base font-normal leading-normal pb-3 pt-1 px-4">
-                I am a Software Engineer with a passion for creating beautiful and functional web applications. 
-                With extensive experience in React, Next.js, and Node.js, I specialize in building modern, 
-                responsive, and performant web applications. I am dedicated to delivering high-quality solutions 
-                that meet user needs and exceed expectations. I am a quick learner and I am always looking for new challenges and opportunities to grow.
-              </p>
-            </section>
-
-            {/* Projects Section */}
-            <section id="projects" className="mt-10 scroll-mt-20">
-              <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3">Projects</h2>
-              <div className="flex overflow-y-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                <div className="flex items-stretch p-4 gap-3">
-                  {/* Project Card 1 */}
-                  <div className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60 hover:scale-105 transition-transform">
-                    <div
-                      className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl flex flex-col"
-                      style={{ backgroundImage: 'url("/project1.jpg")' }}
-                    ></div>
-                    <div>
-                      <p className="text-white text-base font-medium leading-normal">E-Commerce Platform</p>
-                      <p className="text-[#a4a4b2] text-sm font-normal leading-normal">
-                        A full-stack e-commerce platform built with Next.js and Node.js, featuring real-time inventory management and modern UI/UX design with Three.js.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Project Card 2 */}
-                  <div className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60 hover:scale-105 transition-transform">
-                    <div
-                      className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl flex flex-col"
-                      style={{ backgroundImage: 'url("/project2.jpg")' }}
-                    ></div>
-                    <div>
-                      <p className="text-white text-base font-medium leading-normal">Content Management App</p>
-                      <p className="text-[#a4a4b2] text-sm font-normal leading-normal">
-                        A content management app built with Next.js and Node.js, featuring a modern UI/UX design with Tailwind CSS.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Project Card 3 */}
-                  <div className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60 hover:scale-105 transition-transform">
-                    <div
-                      className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl flex flex-col"
-                      style={{ backgroundImage: 'url("/project3.jpg")' }}
-                    ></div>
-                    <div>
-                      <p className="text-white text-base font-medium leading-normal">Portfolio Website</p>
-                      <p className="text-[#a4a4b2] text-sm font-normal leading-normal">
-                        A modern portfolio website showcasing projects and skills with modern UI/UX and responsive design.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+            <section id="about" className="scroll-mt-20">
+              <h2 className="text-white text-xl md:text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-2 md:pb-3">About Me</h2>
+              <div className="bg-[#1e1e24] rounded-xl p-4 md:p-6">
+                <p className="text-white text-sm md:text-base font-normal leading-relaxed">
+                  I am a Software Engineer with a passion for creating beautiful and functional web applications. 
+                  With extensive experience in React, Next.js, and Node.js, I specialize in building modern, 
+                  responsive, and performant web applications. I am dedicated to delivering high-quality solutions 
+                  that meet user needs and exceed expectations. I am a quick learner and I am always looking for new challenges and opportunities to grow.
+                </p>
               </div>
             </section>
 
-            {/* Skills Section */}
-            <section id="skills" className="mt-10 scroll-mt-20">
-              <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3">Skills</h2>
-              <div className="flex gap-3 p-3 flex-wrap pr-4">
-                {[
-                  "React", "Next.js", "Node.js", "TypeScript", "JavaScript",
-                  "HTML", "CSS", "Tailwind CSS", "Responsive Design", 
-                  "PostgresSQL", "MongoDB", "Git", "Docker", "CI/CD"
-                ].map((skill) => (
-                  <div key={skill} className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#2d2d34] pl-4 pr-4 hover:bg-[#3d3d44] transition-colors">
-                    <p className="text-white text-sm font-medium leading-normal">{skill}</p>
+            {/* Projects Section */}
+            <section id="projects" className="scroll-mt-20">
+              <h2 className="text-white text-xl md:text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-2 md:pb-3">Projects</h2>
+              {/* Mobile Carousel */}
+              <div className="md:hidden relative">
+                <div className="relative overflow-hidden rounded-xl">
+                  <div className="flex transition-transform duration-300 ease-in-out" style={{ transform: `translateX(-${currentProject * 100}%)` }}>
+                    {projects.map((project, index) => (
+                      <div key={index} className="w-full flex-shrink-0 p-4">
+                        <div className="flex h-full flex-col gap-4 rounded-xl bg-[#1e1e24] p-4">
+                          <div
+                            className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex flex-col"
+                            style={{ backgroundImage: `url(${project.image})` }}
+                          ></div>
+                          <div>
+                            <p className="text-white text-base font-medium leading-normal">{project.title}</p>
+                            <p className="text-[#a4a4b2] text-sm font-normal leading-normal mt-1">
+                              {project.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* Carousel Navigation */}
+                <div className="absolute inset-y-0 left-0 flex items-center">
+                  <button
+                    onClick={prevProject}
+                    className="p-2 rounded-full bg-[#1e1e24] text-white hover:bg-[#2d2d34] transition-colors"
+                    aria-label="Previous project"
+                  >
+                    <IoChevronBack size={24} />
+                  </button>
+                </div>
+                <div className="absolute inset-y-0 right-0 flex items-center">
+                  <button
+                    onClick={nextProject}
+                    className="p-2 rounded-full bg-[#1e1e24] text-white hover:bg-[#2d2d34] transition-colors"
+                    aria-label="Next project"
+                  >
+                    <IoChevronForward size={24} />
+                  </button>
+                </div>
+                {/* Carousel Indicators */}
+                <div className="flex justify-center gap-2 mt-4">
+                  {projects.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentProject(index)}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        currentProject === index ? 'bg-[#b7b7e0]' : 'bg-[#2d2d34]'
+                      }`}
+                      aria-label={`Go to project ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </div>
+              {/* Desktop Grid */}
+              <div className="hidden md:flex items-stretch p-4 gap-4 flex-wrap">
+                {projects.map((project, index) => (
+                  <div key={index} className="flex h-full flex-col gap-4 rounded-xl w-[calc(33.333%-1rem)] hover:scale-105 transition-transform bg-[#1e1e24] p-4">
+                    <div
+                      className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex flex-col"
+                      style={{ backgroundImage: `url(${project.image})` }}
+                    ></div>
+                    <div>
+                      <p className="text-white text-base font-medium leading-normal">{project.title}</p>
+                      <p className="text-[#a4a4b2] text-sm font-normal leading-normal mt-1">
+                        {project.description}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
             </section>
 
+            {/* Skills Section */}
+            <section id="skills" className="scroll-mt-20">
+              <h2 className="text-white text-xl md:text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-2 md:pb-3">Skills</h2>
+              <div className="bg-[#1e1e24] rounded-xl p-4 md:p-6">
+                <div className="flex gap-2 md:gap-3 flex-wrap">
+                  {[
+                    "React", "Next.js", "Node.js", "TypeScript", "JavaScript",
+                    "HTML", "CSS", "Tailwind CSS", "Responsive Design", 
+                    "PostgresSQL", "MongoDB", "Git", "Docker", "CI/CD"
+                  ].map((skill) => (
+                    <div key={skill} className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#2d2d34] px-3 md:px-4 hover:bg-[#3d3d44] transition-colors">
+                      <p className="text-white text-sm font-medium leading-normal">{skill}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
             {/* Contact Section */}
-            <section id="contact" className="mt-10 scroll-mt-20">
-              <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3">Contact</h2>
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-                  <label className="flex flex-col min-w-40 flex-1">
-                    <p className="text-white text-base font-medium leading-normal pb-2">Email</p>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="your.email@example.com"
-                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#42424d] bg-[#1e1e24] focus:border-[#42424d] h-14 placeholder:text-[#a4a4b2] p-[15px] text-base font-normal leading-normal"
-                    />
-                  </label>
-                </div>
-                <div className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-                  <label className="flex flex-col min-w-40 flex-1">
-                    <p className="text-white text-base font-medium leading-normal pb-2">Message</p>
-                    <textarea
-                      required
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Your message"
-                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#42424d] bg-[#1e1e24] focus:border-[#42424d] min-h-36 placeholder:text-[#a4a4b2] p-[15px] text-base font-normal leading-normal"
-                    ></textarea>
-                  </label>
-                </div>
-                {submitStatus.message && (
-                  <div className={`px-4 ${submitStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
-                    {submitStatus.message}
+            <section id="contact" className="scroll-mt-20">
+              <h2 className="text-white text-xl md:text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-2 md:pb-3">Contact</h2>
+              <div className="bg-[#1e1e24] rounded-xl p-4 md:p-6">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                  <div className="flex max-w-[480px] flex-wrap items-end gap-4">
+                    <label className="flex flex-col w-full">
+                      <p className="text-white text-base font-medium leading-normal pb-2">Email</p>
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="your.email@example.com"
+                        className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#42424d] bg-[#2d2d34] focus:border-[#42424d] h-14 placeholder:text-[#a4a4b2] p-[15px] text-base font-normal leading-normal"
+                      />
+                    </label>
                   </div>
-                )}
-                <div className="flex px-4 py-3">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#b7b7e0] text-[#131316] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#a4a4d0] transition-colors ${
-                      isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-                  >
-                    <span className="truncate">
-                      {isSubmitting ? 'Sending...' : 'Send'}
-                    </span>
-                  </button>
-                </div>
-              </form>
+                  <div className="flex max-w-[480px] flex-wrap items-end gap-4">
+                    <label className="flex flex-col w-full">
+                      <p className="text-white text-base font-medium leading-normal pb-2">Message</p>
+                      <textarea
+                        required
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Your message"
+                        className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#42424d] bg-[#2d2d34] focus:border-[#42424d] min-h-36 placeholder:text-[#a4a4b2] p-[15px] text-base font-normal leading-normal"
+                      ></textarea>
+                    </label>
+                  </div>
+                  {submitStatus.message && (
+                    <div className={`px-4 ${submitStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                      {submitStatus.message}
+                    </div>
+                  )}
+                  <div className="flex">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`flex w-full sm:w-auto min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 md:h-12 px-4 md:px-5 bg-[#b7b7e0] text-[#131316] text-sm md:text-base font-bold leading-normal tracking-[0.015em] hover:bg-[#a4a4d0] transition-colors ${
+                        isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                    >
+                      <span className="truncate">
+                        {isSubmitting ? 'Sending...' : 'Send'}
+                      </span>
+                    </button>
+                  </div>
+                </form>
+              </div>
             </section>
           </div>
         </div>
@@ -320,7 +387,7 @@ export default function Home() {
                   <FaTwitter size={24} />
                 </a>
               </div>
-              <p className="text-[#a4a4b2] text-base font-normal leading-normal">© 2025 Htun Htun. All rights reserved.</p>
+              <p className="text-[#a4a4b2] text-sm md:text-base font-normal leading-normal">© 2025 Htun Htun. All rights reserved.</p>
             </footer>
           </div>
         </footer>
