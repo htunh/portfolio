@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import { projects } from "./utils/constants";
 
 export default function Home() {
   const [animatedText, setAnimatedText] = useState<string[]>([]);
@@ -14,24 +15,6 @@ export default function Home() {
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
-
-  const projects = [
-    {
-      title: "E-Commerce Platform",
-      description: "A full-stack e-commerce platform built with Next.js and Node.js, featuring real-time inventory management and modern UI/UX design with Three.js.",
-      image: "/project1.jpg"
-    },
-    {
-      title: "Content Management App",
-      description: "A content management app built with Next.js and Node.js, featuring a modern UI/UX design with Tailwind CSS.",
-      image: "/project2.jpg"
-    },
-    {
-      title: "Portfolio Website",
-      description: "A modern portfolio website showcasing projects and skills with modern UI/UX and responsive design.",
-      image: "/project3.jpg"
-    }
-  ];
 
   const nextProject = () => {
     setCurrentProject((prev) => (prev + 1) % projects.length);
@@ -113,7 +96,7 @@ export default function Home() {
               <a className="text-white text-sm font-medium leading-normal hover:text-[#b7b7e0] transition-colors" href="#contact">Contact</a>
             </div>
             {/* Mobile Menu Button */}
-            <button className="md:hidden text-white p-2">
+            <button className="md:hidden text-white p-2" aria-label="Open menu">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
@@ -230,8 +213,8 @@ export default function Home() {
               <div className="md:hidden relative">
                 <div className="relative overflow-hidden rounded-xl">
                   <div className="flex transition-transform duration-300 ease-in-out" style={{ transform: `translateX(-${currentProject * 100}%)` }}>
-                    {projects.map((project, index) => (
-                      <div key={index} className="w-full flex-shrink-0 p-4">
+                    {projects.map((project) => (
+                      <div key={project.title} className="w-full flex-shrink-0 p-4">
                         <div className="flex h-full flex-col gap-4 rounded-xl bg-[#1e1e24] p-4">
                           <div
                             className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex flex-col"
@@ -283,8 +266,8 @@ export default function Home() {
               </div>
               {/* Desktop Grid */}
               <div className="hidden md:flex items-stretch p-4 gap-4 flex-wrap">
-                {projects.map((project, index) => (
-                  <div key={index} className="flex h-full flex-col gap-4 rounded-xl w-[calc(33.333%-1rem)] hover:scale-105 transition-transform bg-[#1e1e24] p-4">
+                {projects.map((project) => (
+                  <div key={project.title} className="flex h-full flex-col gap-4 rounded-xl w-[calc(33.333%-1rem)] hover:scale-105 transition-transform bg-[#1e1e24] p-4">
                     <div
                       className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex flex-col"
                       style={{ backgroundImage: `url(${project.image})` }}
