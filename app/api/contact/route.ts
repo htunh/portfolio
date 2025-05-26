@@ -1,30 +1,26 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+const emailUser = process.env.EMAIL_USER;
+const emailPass = process.env.EMAIL_PASS;
+
+if (!emailUser || !emailPass) {
+  console.error("Missing EMAIL_USER or EMAIL_PASS environment variables");
+  throw new Error("Server configuration error: Missing email credentials");
+}
+
+// Create a transporter using SMTP
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: emailUser,
+    pass: emailPass,
+  },
+});
+
 export async function POST(request: Request) {
   try {
-    const emailUser = process.env.EMAIL_USER;
-    const emailPass = process.env.EMAIL_PASS;
-
-    if (!emailUser || !emailPass) {
-      console.error("Missing EMAIL_USER or EMAIL_PASS environment variables");
-      return NextResponse.json(
-        { error: "Server configuration error: Missing email credentials" },
-        { status: 500 }
-      );
-    }
-
     const { email, message } = await request.json();
-
-    // Create a transporter using SMTP
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: emailUser,
-        pass: emailPass,
-      },
-    });
-
     // Email content
     const mailOptions = {
       from: emailUser,
