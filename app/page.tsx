@@ -5,12 +5,56 @@ import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 export default function Home() {
   const [animatedText, setAnimatedText] = useState<string[]>([]);
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
 
   useEffect(() => {
     const text = "Hi, I'm Htun Htun 👋";
     const characters = Array.from(text);
     setAnimatedText(characters);
   }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, message }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus({
+          type: 'success',
+          message: 'Message sent successfully!'
+        });
+        setEmail('');
+        setMessage('');
+      } else {
+        throw new Error(data.error || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setSubmitStatus({
+        type: 'error',
+        message: 'Failed to send message. Please try again.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-[#131316] dark group/design-root overflow-x-hidden">
@@ -212,29 +256,51 @@ export default function Home() {
             {/* Contact Section */}
             <section id="contact" className="mt-10 scroll-mt-20">
               <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3">Contact</h2>
-              <div className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-                <label className="flex flex-col min-w-40 flex-1">
-                  <p className="text-white text-base font-medium leading-normal pb-2">Email</p>
-                  <input
-                    placeholder="your.email@example.com"
-                    className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#42424d] bg-[#1e1e24] focus:border-[#42424d] h-14 placeholder:text-[#a4a4b2] p-[15px] text-base font-normal leading-normal"
-                  />
-                </label>
-              </div>
-              <div className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-                <label className="flex flex-col min-w-40 flex-1">
-                  <p className="text-white text-base font-medium leading-normal pb-2">Message</p>
-                  <textarea
-                    placeholder="Your message"
-                    className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#42424d] bg-[#1e1e24] focus:border-[#42424d] min-h-36 placeholder:text-[#a4a4b2] p-[15px] text-base font-normal leading-normal"
-                  ></textarea>
-                </label>
-              </div>
-              <div className="flex px-4 py-3">
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#b7b7e0] text-[#131316] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#a4a4d0] transition-colors">
-                  <span className="truncate">Send</span>
-                </button>
-              </div>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <div className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                  <label className="flex flex-col min-w-40 flex-1">
+                    <p className="text-white text-base font-medium leading-normal pb-2">Email</p>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="your.email@example.com"
+                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#42424d] bg-[#1e1e24] focus:border-[#42424d] h-14 placeholder:text-[#a4a4b2] p-[15px] text-base font-normal leading-normal"
+                    />
+                  </label>
+                </div>
+                <div className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                  <label className="flex flex-col min-w-40 flex-1">
+                    <p className="text-white text-base font-medium leading-normal pb-2">Message</p>
+                    <textarea
+                      required
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Your message"
+                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border border-[#42424d] bg-[#1e1e24] focus:border-[#42424d] min-h-36 placeholder:text-[#a4a4b2] p-[15px] text-base font-normal leading-normal"
+                    ></textarea>
+                  </label>
+                </div>
+                {submitStatus.message && (
+                  <div className={`px-4 ${submitStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                    {submitStatus.message}
+                  </div>
+                )}
+                <div className="flex px-4 py-3">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#b7b7e0] text-[#131316] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#a4a4d0] transition-colors ${
+                      isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    <span className="truncate">
+                      {isSubmitting ? 'Sending...' : 'Send'}
+                    </span>
+                  </button>
+                </div>
+              </form>
             </section>
           </div>
         </div>

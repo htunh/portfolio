@@ -15,8 +15,8 @@ const notoSans = Noto_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Htun Htun - Senior Frontend Engineer",
-  description: "Portfolio website of Htun Htun, a Senior Frontend Engineer specializing in React, Next.js, and Node.js.",
+  title: "Htun Htun - Software Engineer",
+  description: "Portfolio website of Htun Htun, a Software Engineer specializing in React, Next.js, and Node.js.",
 };
 
 export default function RootLayout({
