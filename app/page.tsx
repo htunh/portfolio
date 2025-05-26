@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import { IoChevronBack, IoChevronForward, IoClose } from "react-icons/io5";
 import { projects } from "./utils/constants";
+import Link from "next/link";
 
 export default function Home() {
   const [animatedText, setAnimatedText] = useState<string[]>([]);
@@ -11,6 +12,7 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentProject, setCurrentProject] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     type: "success" | "error" | null;
     message: string;
@@ -29,6 +31,37 @@ export default function Home() {
     const characters = Array.from(text);
     setAnimatedText(characters);
   }, []);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const menu = document.getElementById("mobile-menu");
+      const menuButton = document.getElementById("menu-button");
+      if (
+        menu &&
+        !menu.contains(event.target as Node) &&
+        menuButton &&
+        !menuButton.contains(event.target as Node)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMenuOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,9 +125,11 @@ export default function Home() {
                 </defs>
               </svg>
             </div>
-            <h2 className="text-white text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">
-              Htun&apos;s Portfolio
-            </h2>
+            <Link href="/" className="hover:text-[#b7b7e0] transition-colors">
+              <h2 className="text-white text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">
+                Htun&apos;s Portfolio
+              </h2>
+            </Link>
           </div>
           <div className="flex flex-1 justify-end">
             <div className="hidden md:flex items-center gap-9">
@@ -124,23 +159,95 @@ export default function Home() {
               </a>
             </div>
             {/* Mobile Menu Button */}
-            <button className="md:hidden text-white p-2" aria-label="Open menu">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
+            <button
+              id="menu-button"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden text-white p-2 z-50"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            >
+              {isMenuOpen ? (
+                <IoClose className="w-6 h-6" />
+              ) : (
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              )}
             </button>
           </div>
         </header>
+
+        {/* Mobile Menu Panel */}
+        <div
+          id="mobile-menu"
+          className={`fixed inset-0 bg-[#131316] z-40 transform transition-transform duration-300 ease-in-out ${
+            isMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="flex flex-col h-full pt-20 px-6">
+            <nav className="flex flex-col gap-6">
+              <a
+                className="text-white text-xl font-medium leading-normal hover:text-[#b7b7e0] transition-colors"
+                href="#about"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </a>
+              <a
+                className="text-white text-xl font-medium leading-normal hover:text-[#b7b7e0] transition-colors"
+                href="#projects"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Projects
+              </a>
+              <a
+                className="text-white text-xl font-medium leading-normal hover:text-[#b7b7e0] transition-colors"
+                href="#skills"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Skills
+              </a>
+              <a
+                className="text-white text-xl font-medium leading-normal hover:text-[#b7b7e0] transition-colors"
+                href="#contact"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
+              </a>
+            </nav>
+            <div className="mt-auto pb-8">
+              <div className="flex gap-6">
+                <a
+                  href="https://github.com/htunh"
+                  className="text-[#a4a4b2] hover:text-white transition-colors"
+                >
+                  <FaGithub size={24} />
+                </a>
+                <a
+                  href="https://mm.linkedin.com/in/htun-htun-611307134"
+                  className="text-[#a4a4b2] hover:text-white transition-colors"
+                >
+                  <FaLinkedin size={24} />
+                </a>
+                <a
+                  href="#"
+                  className="text-[#a4a4b2] hover:text-white transition-colors"
+                >
+                  <FaTwitter size={24} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Main Content */}
         <div className="px-4 sm:px-6 md:px-8 lg:px-40 flex flex-1 justify-center py-5 mt-16 md:mt-20">
