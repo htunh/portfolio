@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 19, 19, 22;
+  --background-end-rgb: 19, 19, 22;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,7 +16,177 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e1e24;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2d2d34;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3d3d44;
+}
+
+/* Form input focus styles */
+.form-input:focus {
+  border-color: #b7b7e0;
+  box-shadow: 0 0 0 2px rgba(183, 183, 224, 0.2);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hero Section Animations */
+@keyframes float-slow {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(2deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes float-medium {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(-2deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes float-fast {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes float-medium-reverse {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(10px) rotate(-1deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes float-slow-reverse {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(15px) rotate(2deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes pulse-slow {
+  0% { opacity: 0.1; transform: scale(1); }
+  50% { opacity: 0.2; transform: scale(1.05); }
+  100% { opacity: 0.1; transform: scale(1); }
+}
+
+@keyframes particle-1 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  25% { transform: translate(20px, -20px); opacity: 0.7; }
+  50% { transform: translate(40px, -40px); opacity: 0.5; }
+  75% { transform: translate(20px, -20px); opacity: 0.3; }
+  100% { transform: translate(0, 0); opacity: 0; }
+}
+
+@keyframes particle-2 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  25% { transform: translate(-20px, 20px); opacity: 0.7; }
+  50% { transform: translate(-40px, 40px); opacity: 0.5; }
+  75% { transform: translate(-20px, 20px); opacity: 0.3; }
+  100% { transform: translate(0, 0); opacity: 0; }
+}
+
+@keyframes particle-3 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  25% { transform: translate(20px, 20px); opacity: 0.7; }
+  50% { transform: translate(40px, 40px); opacity: 0.5; }
+  75% { transform: translate(20px, 20px); opacity: 0.3; }
+  100% { transform: translate(0, 0); opacity: 0; }
+}
+
+@keyframes particle-4 {
+  0% { transform: translate(0, 0); opacity: 0; }
+  25% { transform: translate(-20px, -20px); opacity: 0.7; }
+  50% { transform: translate(-40px, -40px); opacity: 0.5; }
+  75% { transform: translate(-20px, -20px); opacity: 0.3; }
+  100% { transform: translate(0, 0); opacity: 0; }
+}
+
+/* Animation Classes */
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-medium {
+  animation: float-medium 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-fast {
+  animation: float-fast 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-medium-reverse {
+  animation: float-medium-reverse 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-slow-reverse {
+  animation: float-slow-reverse 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-particle-1 {
+  animation: particle-1 4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-particle-2 {
+  animation: particle-2 4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-particle-3 {
+  animation: particle-3 4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-particle-4 {
+  animation: particle-4 4s ease-in-out infinite;
+  will-change: transform, opacity;
 }
